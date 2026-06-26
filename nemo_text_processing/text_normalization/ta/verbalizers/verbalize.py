@@ -20,7 +20,7 @@ from nemo_text_processing.text_normalization.ta.verbalizers.cardinal import Card
 #from nemo_text_processing.text_normalization.hi.verbalizers.fraction import FractionFst
 #from nemo_text_processing.text_normalization.hi.verbalizers.measure import MeasureFst
 #from nemo_text_processing.text_normalization.hi.verbalizers.money import MoneyFst
-#from nemo_text_processing.text_normalization.hi.verbalizers.ordinal import OrdinalFst
+from nemo_text_processing.text_normalization.ta.verbalizers.ordinal import OrdinalFst
 #from nemo_text_processing.text_normalization.hi.verbalizers.telephone import TelephoneFst
 #from nemo_text_processing.text_normalization.hi.verbalizers.time import TimeFst
 #from nemo_text_processing.text_normalization.ta.verbalizers.whitelist import WhiteListFst
@@ -42,10 +42,11 @@ class VerbalizeFst(GraphFst):
 
         cardinal = CardinalFst(deterministic=deterministic)
         cardinal_graph = cardinal.fst
-        
+        ordinal = OrdinalFst(deterministic=deterministic)
+        ordinal_graph = ordinal.fst
         graph = (
             cardinal_graph
-           
+            | ordinal_graph
         )
 
         self.fst = graph
