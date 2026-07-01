@@ -102,6 +102,8 @@ class CardinalFst(GraphFst):
        graph_hundreds |= fused_hundred_prefix + zero_delete + pynutil.insert(" ") + single_digit
        # 210-999
        graph_hundreds |= fused_hundred_prefix + pynutil.insert(" ") + teens_ties
+       # 200-900 exact (two trailing zeros, nothing follows) — e.g. 500 → ஐநூற்று
+       graph_hundreds |= fused_hundred_prefix + (zero_delete ** 2)
        graph_hundreds = graph_hundreds.optimize()
        self.graph_hundreds = graph_hundreds
 
@@ -233,6 +235,7 @@ class CardinalFst(GraphFst):
        graph_ten_lakhs |= create_larger_number_graph(teens_and_ties, suffix_lakhs_tail, 1, graph_thousands)
        graph_ten_lakhs |= create_larger_number_graph(teens_and_ties, suffix_lakhs_tail, 0, graph_ten_thousands)
        graph_ten_lakhs = graph_ten_lakhs.optimize()
+       graph_ten_lakhs = pynutil.add_weight(graph_ten_lakhs, -0.5)
        self.graph_ten_lakhs = graph_ten_lakhs
 
        # CRORES GRAPH — கோடி 
@@ -259,6 +262,7 @@ class CardinalFst(GraphFst):
        graph_ten_crores |= create_larger_number_graph(teens_and_ties, suffix_crores_tail, 1, graph_lakhs)
        graph_ten_crores |= create_larger_number_graph(teens_and_ties, suffix_crores_tail, 0, graph_ten_lakhs)
        graph_ten_crores = graph_ten_crores.optimize()
+       graph_ten_crores = pynutil.add_weight(graph_ten_crores, -0.5) 
 
        # hundreds of crores: 100-999 கோடி
        graph_hundreds_of_crores  = create_graph_suffix(exact_hundred, suffix_crores, 7)
@@ -321,6 +325,7 @@ class CardinalFst(GraphFst):
        graph_ten_lakhs_of_crores |= create_larger_number_graph(graph_ten_lakhs, suffix_crores_tail, 1, graph_lakhs)
        graph_ten_lakhs_of_crores |= create_larger_number_graph(graph_ten_lakhs, suffix_crores_tail, 0, graph_ten_lakhs)
        graph_ten_lakhs_of_crores = graph_ten_lakhs_of_crores.optimize()
+       graph_ten_lakhs_of_crores = pynutil.add_weight(graph_ten_lakhs_of_crores, -0.5)
 
        # crores of crores
        graph_crores_of_crores  = create_graph_suffix(graph_crores, suffix_crores, 7)
@@ -342,6 +347,7 @@ class CardinalFst(GraphFst):
        graph_ten_crores_of_crores |= create_larger_number_graph(graph_ten_crores, suffix_crores_tail, 1, graph_lakhs)
        graph_ten_crores_of_crores |= create_larger_number_graph(graph_ten_crores, suffix_crores_tail, 0, graph_ten_lakhs)
        graph_ten_crores_of_crores = graph_ten_crores_of_crores.optimize()
+       graph_ten_crores_of_crores = pynutil.add_weight(graph_ten_crores_of_crores, -0.5)
 
        # LEADING ZERO and FINAL GRAPH
        graph_leading_zero = zero + insert_space + single_digit
