@@ -104,6 +104,11 @@ class CardinalFst(GraphFst):
        graph_hundreds |= fused_hundred_prefix + pynutil.insert(" ") + teens_ties
        # 200-900 exact (two trailing zeros, nothing follows) — e.g. 500 → ஐநூற்று
        graph_hundreds |= fused_hundred_prefix + (zero_delete ** 2)
+       # 100 exact (two trailing zeros, nothing follows) — e.g. 100 → நூற்று
+       graph_hundreds |= (
+           (pynini.cross("1", "நூறு") | pynini.cross("௧", "நூறு"))
+            + (zero_delete ** 2)
+       )
        graph_hundreds = graph_hundreds.optimize()
        self.graph_hundreds = graph_hundreds
 

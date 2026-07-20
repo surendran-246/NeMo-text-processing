@@ -30,7 +30,7 @@ from nemo_text_processing.text_normalization.ta.taggers.cardinal import Cardinal
 # from nemo_text_processing.text_normalization.hi.taggers.date import DateFst
 from nemo_text_processing.text_normalization.ta.taggers.decimal import DecimalFst
 # from nemo_text_processing.text_normalization.hi.taggers.electronic import ElectronicFst
-# from nemo_text_processing.text_normalization.hi.taggers.fraction import FractionFst
+from nemo_text_processing.text_normalization.ta.taggers.fraction import FractionFst
 # from nemo_text_processing.text_normalization.hi.taggers.measure import MeasureFst
 # from nemo_text_processing.text_normalization.hi.taggers.money import MoneyFst
 from nemo_text_processing.text_normalization.ta.taggers.ordinal import OrdinalFst
@@ -86,8 +86,8 @@ class ClassifyFst(GraphFst):
             decimal = DecimalFst(cardinal=cardinal, deterministic=deterministic)
             decimal_graph = decimal.fst
 
-            # fraction = FractionFst(cardinal=cardinal, deterministic=deterministic)
-            # fraction_graph = fraction.fst
+            fraction = FractionFst(cardinal=cardinal, deterministic=deterministic)
+            fraction_graph = fraction.fst
 
             # date = DateFst(cardinal=cardinal)
             # date_graph = date.fst
@@ -121,7 +121,7 @@ class ClassifyFst(GraphFst):
                 #pynutil.add_weight(whitelist_graph, 1.01)|
                 pynutil.add_weight(cardinal_graph, 1.1)
                 | pynutil.add_weight(decimal_graph, 1.1)
-                #| pynutil.add_weight(fraction_graph, 1.1)
+                | pynutil.add_weight(fraction_graph, 1.1)
                 #| pynutil.add_weight(date_graph, 1.1)
                 #| pynutil.add_weight(time_graph, 1.1)
                 #| pynutil.add_weight(measure_graph, 1.1)
